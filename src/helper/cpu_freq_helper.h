@@ -3,14 +3,14 @@ using namespace KAuth;
 
 class CPUFreqHelper : public QObject
 {
-	Q_OBJECT
-	public:
-		explicit CPUFreqHelper(QObject *parent = 0);
+    Q_OBJECT
+public:
+    explicit CPUFreqHelper(QObject *parent = NULL);
 
-	public slots:
-		ActionReply read(QVariantMap args);
-		ActionReply write(QVariantMap args);
+public slots:
+    ActionReply read(QVariantMap args);
+    ActionReply write(QVariantMap args);
 
-	private:
-		QString get_key_varmap(const QVariantMap &args, const QString& key);
+private:
+    QString get_key_varmap(const QVariantMap &args, const QString& key);
 };
