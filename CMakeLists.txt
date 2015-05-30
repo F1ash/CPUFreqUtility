@@ -12,17 +12,23 @@ set(cpu_freq_helper_SRCS
     src/helper/cpu_freq_helper.cpp
     src/helper/cpu_freq_helper.h)
 set(HEADERS
-    src/mainwindow.h)
+    src/mainwindow.h
+    src/cpu_item.h
+    src/toolbar.h
+    src/tray/traywidget.h)
 set(SOURCES
-    main.cpp
-    src/mainwindow.cpp)
+    src/main.cpp
+    src/mainwindow.cpp
+    src/cpu_item.cpp
+    src/toolbar.cpp
+    src/tray/traywidget.cpp)
 set(CFH_DESKTOP_FILE ${PROJECT_NAME}.desktop)
 
 qt5_wrap_cpp (HELPER_MOC_SOURCES ${cpu_freq_helper_SRCS})
 
-find_package (Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
-qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+qt5_wrap_cpp(MOC_SOURCES ${HEADERS})
 qt5_add_resources(RCCs src/cpufreq_icons.qrc)
 set (BUILD_PROJECT_LIBRARIES ${Qt5Widgets_LIBRARIES})
 add_definitions(${Qt5Widgets_DEFINITIONS})

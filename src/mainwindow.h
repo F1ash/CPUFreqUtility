@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QIcon>
-#include <QSystemTrayIcon>
+#include <QVBoxLayout>
+#include "tray/traywidget.h"
+#include "cpu_item.h"
+#include "toolbar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -14,10 +16,15 @@ public:
 signals:
 
 private:
-    QSystemTrayIcon    *trayIcon;
+    ToolBar            *toolBar;
+    TrayIcon           *trayIcon;
+    QVBoxLayout        *baseLayout;
+    QWidget            *baseWdg;
 
 private slots:
     void                initTrayIcon();
+    void                changeVisibility();
+    void                trayIconActivated(QSystemTrayIcon::ActivationReason);
 };
 
 #endif // MAINWINDOW_H
