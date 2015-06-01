@@ -6,6 +6,10 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include <QMessageBox>
+#include <QDebug>
+#include <kauth.h>
+using namespace KAuth;
 
 class CPU_Item : public QWidget
 {
@@ -24,7 +28,9 @@ private:
                     *maxFreq;
     QHBoxLayout     *baseLayout;
 
-public slots:
+private slots:
+    void             onResult(KJob*);
+    void             readProcData(uint, QString&);
 };
 
 #endif // CPU_ITEM_H

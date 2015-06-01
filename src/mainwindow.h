@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <unistd.h>
 #include "tray/traywidget.h"
 #include "cpu_item.h"
 #include "toolbar.h"
@@ -23,6 +24,7 @@ private:
 
 private slots:
     void                initTrayIcon();
+    void                initCPU_Items();
     void                changeVisibility();
     void                trayIconActivated(QSystemTrayIcon::ActivationReason);
 };

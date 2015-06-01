@@ -12,9 +12,12 @@ public:
     explicit ToolBar(QWidget *parent = NULL);
 
 private:
-    QAction          *firstForAll,
+    QPushButton      *firstForAll,
                      *restore,
                      *apply;
+    QAction          *firstForAllAct,
+                     *restoreAct,
+                     *applyAct;
 };
 
 #endif // TOOLBAR_H

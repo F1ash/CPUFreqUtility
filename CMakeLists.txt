@@ -30,7 +30,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 qt5_wrap_cpp(MOC_SOURCES ${HEADERS})
 qt5_add_resources(RCCs src/cpufreq_icons.qrc)
-set (BUILD_PROJECT_LIBRARIES ${Qt5Widgets_LIBRARIES})
+set (BUILD_PROJECT_LIBRARIES ${Qt5Widgets_LIBRARIES} KF5::Auth)
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
 add_executable(cpu_freq_helper ${cpu_freq_helper_SRCS} ${HELPER_MOC_SOURCES})

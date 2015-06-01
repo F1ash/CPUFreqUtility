@@ -16,9 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     setCentralWidget(baseWdg);
-    baseLayout->addWidget(new CPU_Item(this));
     //hide();
     initTrayIcon();
+    initCPU_Items();
 }
 void MainWindow::initTrayIcon()
 {
@@ -28,6 +28,13 @@ void MainWindow::initTrayIcon()
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
     trayIcon->show();
+}
+void MainWindow::initCPU_Items()
+{
+    int num = sysconf( _SC_NPROCESSORS_ONLN );
+    for (int i=0; i<num; i++) {
+        baseLayout->addWidget(new CPU_Item(this, i));
+    };
 }
 void MainWindow::changeVisibility()
 {

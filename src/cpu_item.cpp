@@ -24,3 +24,32 @@ CPU_Item::CPU_Item(
     setLayout(baseLayout);
 }
 
+void CPU_Item::onResult(KJob *_job)
+{
+    ExecuteJob *job = static_cast<ExecuteJob*>(_job);
+    if (job->error()) {
+        QMessageBox::information(this, "Error", \
+                    QString("KAuth returned an error code: %1 \n %2")
+                    .arg(job->error()).arg(job->errorText()));
+        //reply.setData(QVariant({QString('contents') : 0}).toMap());
+        //print [reply.data()]
+    } else {
+        qDebug()<<job->data();
+    };
+}
+void CPU_Item::readProcData(uint number, QString &fileName)
+{
+    QVariantMap args;
+    args["procnumb"] = QString(number);
+    args["filename"] = QString(fileName);
+
+    Action act("org.freedesktop.auth.cpufrequtility.read");
+    act.setHelperId("org.freedesktop.auth.cpufrequtility");
+    act.setArguments(args);
+    //print act.hasHelper(), 'ready', act.helperID(), act.name(), 'Valid is', act.isValid();
+    ExecuteJob *job = act.execute();
+    job->setAutoDelete(true);
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(onResult(KJob*)));
+    job->start();
+}
