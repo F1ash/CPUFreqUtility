@@ -31,6 +31,7 @@ private:
 private slots:
     void             onResult(KJob*);
     void             readProcData(uint, QString&);
+    void             writeCpuData(uint, QString&, QString&);
 };
 
 #endif // CPU_ITEM_H

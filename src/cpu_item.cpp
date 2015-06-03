@@ -46,7 +46,23 @@ void CPU_Item::readProcData(uint number, QString &fileName)
     Action act("org.freedesktop.auth.cpufrequtility.read");
     act.setHelperId("org.freedesktop.auth.cpufrequtility");
     act.setArguments(args);
-    //print act.hasHelper(), 'ready', act.helperID(), act.name(), 'Valid is', act.isValid();
+    ExecuteJob *job = act.execute();
+    job->setAutoDelete(true);
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(onResult(KJob*)));
+    job->start();
+}
+
+void CPU_Item::writeCpuData(uint number, QString &fileName, QString &parametr)
+{
+    QVariantMap args;
+    args["procnumb"] = number;
+    args["filename"] = fileName;
+    args["parametr"] = parametr;
+
+    Action act("org.freedesktop.auth.cpufrequtility.write");
+    act.setHelperId("org.freedesktop.auth.cpufrequtility");
+    act.setArguments(args);
     ExecuteJob *job = act.execute();
     job->setAutoDelete(true);
     connect(job, SIGNAL(result(KJob*)),
