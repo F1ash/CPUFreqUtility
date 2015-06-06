@@ -52,6 +52,7 @@ ActionReply CPUFreqHelper::read(QVariantMap args)
     QString contents = stream.readAll();
  
     QVariantMap retdata;
+    retdata["filename"] = filename;
     retdata["contents"] = contents;
  
     reply.setData(retdata);
@@ -89,6 +90,7 @@ ActionReply CPUFreqHelper::write(QVariantMap args)
     out << parametr << endl;
 
     QVariantMap retdata;
+    retdata["filename"] = filename.prepend("WRITED:");
     retdata["contents"] = QString("Success");
     reply.setData(retdata);
     file.close();

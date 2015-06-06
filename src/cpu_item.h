@@ -17,11 +17,12 @@ class CPU_Item : public QWidget
 public:
     explicit CPU_Item(
             QWidget *parent = 0,
-            uint        num = 0);
+            QString  num = "0");
 
 signals:
 
 private:
+    const QString    cpuNumber;
     QCheckBox       *cpuN;
     QComboBox       *governors,
                     *minFreq,
@@ -29,9 +30,11 @@ private:
     QHBoxLayout     *baseLayout;
 
 private slots:
-    void             onResult(KJob*);
-    void             readProcData(uint, QString&);
-    void             writeCpuData(uint, QString&, QString&);
+    void             setItemData();
+    void             onResult(ExecuteJob*);
+    void             readProcData(const QString&);
+    void             writeProcData(QString&, QString&);
+    void             startAction(Action&);
 };
 
 #endif // CPU_ITEM_H

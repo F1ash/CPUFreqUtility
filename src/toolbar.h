@@ -10,13 +10,13 @@ class ToolBar : public QToolBar
     Q_OBJECT
 public:
     explicit ToolBar(QWidget *parent = NULL);
+    QPushButton      *firstForAll,
+                     *reload,
+                     *apply;
 
 private:
-    QPushButton      *firstForAll,
-                     *restore,
-                     *apply;
     QAction          *firstForAllAct,
-                     *restoreAct,
+                     *reloadAct,
                      *applyAct;
 };
 

@@ -8,10 +8,10 @@ ToolBar::ToolBar(QWidget *parent) :
     firstForAll->setToolTip("First for all");
     firstForAll->setCheckable(true);
     firstForAllAct  = addWidget(firstForAll);
-    restore     =
+    reload     =
             new QPushButton(QIcon::fromTheme("view-refresh"), "", this);
-    restore->setToolTip("Restore");
-    restoreAct      = addWidget(restore);
+    reload->setToolTip("Reload");
+    reloadAct      = addWidget(reload);
     apply       =
             new QPushButton(QIcon::fromTheme("dialog-ok-apply"), "", this);
     apply->setToolTip("Apply settings");
