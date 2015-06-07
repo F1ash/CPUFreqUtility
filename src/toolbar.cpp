@@ -10,11 +10,11 @@ ToolBar::ToolBar(QWidget *parent) :
     firstForAllAct  = addWidget(firstForAll);
     reload     =
             new QPushButton(QIcon::fromTheme("view-refresh"), "", this);
-    reload->setToolTip("Reload");
+    reload->setToolTip("Reload CPU Data");
     reloadAct      = addWidget(reload);
     apply       =
             new QPushButton(QIcon::fromTheme("dialog-ok-apply"), "", this);
-    apply->setToolTip("Apply settings");
+    apply->setToolTip("Apply new settings");
     applyAct        = addWidget(apply);
 }
 

@@ -13,10 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("CPU Frequence Utility");
     toolBar = new ToolBar(this);
     addToolBar(toolBar);
-    baseLayout = new QVBoxLayout();
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    setCentralWidget(baseWdg);
+    baseLayout = NULL;
+    baseWdg = NULL;
     //hide();
     initTrayIcon();
     readCPUCount();
@@ -38,10 +36,22 @@ void MainWindow::initTrayIcon()
 }
 void MainWindow::initCPU_Items(QStringList &cpus)
 {
+    if (baseLayout!=NULL) {
+        delete baseLayout;
+        baseLayout = NULL;
+    };
+    if (baseWdg!=NULL) {
+        delete baseWdg;
+        baseWdg = NULL;
+    };
+    baseLayout = new QVBoxLayout();
+    baseWdg = new QWidget(this);
     foreach (QString cpuNum, cpus) {
         CPU_Item *wdg = new CPU_Item(this, cpuNum);
         baseLayout->addWidget(wdg);
     };
+    baseWdg->setLayout(baseLayout);
+    setCentralWidget(baseWdg);
 }
 void MainWindow::changeVisibility()
 {
@@ -104,7 +114,7 @@ void MainWindow::setFirstForAll(bool state)
 
 void MainWindow::reloadCPUItems()
 {
-
+    readCPUCount();
 }
 
 void MainWindow::applyChanges()
