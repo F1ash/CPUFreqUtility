@@ -37,6 +37,18 @@ void MainWindow::initTrayIcon()
 void MainWindow::initCPU_Items(QStringList &cpus)
 {
     if (baseLayout!=NULL) {
+        for (uint i=0; i<baseLayout->count(); i++) {
+            CPU_Item *wdg = static_cast<CPU_Item*>(
+                        baseLayout->itemAt(i)->widget());
+            if ( NULL!=wdg && i==0 ) {
+                disconnect(wdg, SIGNAL(curr_gov(QString&)),
+                           this, SLOT(receiveCurrGovernor(QString&)));
+                disconnect(wdg, SIGNAL(max_freq(QString&)),
+                           this, SLOT(receiveCurrMaxFreq(QString&)));
+                disconnect(wdg, SIGNAL(min_freq(QString&)),
+                           this, SLOT(receiveCurrMinFreq(QString&)));
+            };
+        };
         delete baseLayout;
         baseLayout = NULL;
     };
@@ -49,10 +61,19 @@ void MainWindow::initCPU_Items(QStringList &cpus)
     foreach (QString cpuNum, cpus) {
         CPU_Item *wdg = new CPU_Item(this, cpuNum);
         baseLayout->addWidget(wdg);
+        if ( cpuNum=="0" ) {
+            connect(wdg, SIGNAL(curr_gov(QString&)),
+                    this, SLOT(receiveCurrGovernor(QString&)));
+            connect(wdg, SIGNAL(max_freq(QString&)),
+                    this, SLOT(receiveCurrMaxFreq(QString&)));
+            connect(wdg, SIGNAL(min_freq(QString&)),
+                    this, SLOT(receiveCurrMinFreq(QString&)));
+        };
     };
     baseWdg->setLayout(baseLayout);
     setCentralWidget(baseWdg);
 }
+
 void MainWindow::changeVisibility()
 {
     if (this->isVisible()) {
@@ -66,6 +87,7 @@ void MainWindow::changeVisibility()
         trayIcon->hideAction->setIcon (QIcon::fromTheme("go-down"));
     };
 }
+
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 {
   if (r==QSystemTrayIcon::Trigger) changeVisibility();
@@ -103,21 +125,69 @@ void MainWindow::readCPUCount()
         onResult(job);
     } else {
         QMessageBox::information(this, "Error", \
-                    QString("ExecuteJob don't started."));
+                    QString("ExecuteJob don't started.\n%1 : %2")
+                    .arg(job->error()).arg(job->errorText()));
     };
 }
 
 void MainWindow::setFirstForAll(bool state)
 {
-
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg )
+            wdg->setFirstForAllState(state);
+    };
 }
 
 void MainWindow::reloadCPUItems()
 {
+    toolBar->setEnabled(false);
     readCPUCount();
+    toolBar->setEnabled(true);
 }
 
 void MainWindow::applyChanges()
 {
+    toolBar->setEnabled(false);
+    baseWdg->setEnabled(false);
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg )
+            wdg->applyNewSettings();
+    };
+    baseWdg->setEnabled(true);
+    reloadCPUItems();
+    toolBar->setEnabled(true);
+}
 
+void MainWindow::receiveCurrGovernor(QString &arg)
+{
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg )
+            wdg->setCurrGovernor(arg);
+    };
+}
+
+void MainWindow::receiveCurrMaxFreq(QString &arg)
+{
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg )
+            wdg->setCurrMaxFreq(arg);
+    };
+}
+
+void MainWindow::receiveCurrMinFreq(QString &arg)
+{
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg )
+            wdg->setCurrMinFreq(arg);
+    };
 }

@@ -3,6 +3,8 @@
 CPU_Item::CPU_Item(QWidget *parent, QString num) :
     QWidget(parent), cpuNumber(num)
 {
+    firstForAll = false;
+    online = false;
     cpuN = new QCheckBox(this);
     cpuN->setText(QString("CPU%1").arg(cpuNumber));
     if ( cpuNumber=="0" ) {
@@ -25,9 +27,24 @@ CPU_Item::CPU_Item(QWidget *parent, QString num) :
     baseLayout->addWidget(maxFreq);
     setLayout(baseLayout);
     setItemData();
+    if ( cpuNumber=="0" ) {
+        connect(governors, SIGNAL(currentTextChanged(QString)),
+                this, SLOT(emitCurrentGovernor(QString)));
+        connect(maxFreq, SIGNAL(currentTextChanged(QString)),
+                this, SLOT(emitCurrentMaxFreq(QString)));
+        connect(minFreq, SIGNAL(currentTextChanged(QString)),
+                this, SLOT(emitCurrentMinFreq(QString)));
+    };
 }
 
 /* private slots */
+void CPU_Item::setParametersEnabled(bool state)
+{
+    governors->setEnabled(state);
+    maxFreq->setEnabled(state);
+    minFreq->setEnabled(state);
+}
+
 void CPU_Item::setItemData()
 {
     QStringList keys;
@@ -56,15 +73,20 @@ void CPU_Item::onResult(ExecuteJob *job)
                     .arg(job->error()).arg(job->errorText()));
     } else if ( job->data().keys().contains("filename") ) {
         if ( job->data().value("filename")=="online" ) {
-            bool online = (job->data().value("contents")
+            online = (job->data().value("contents")
                            .toString().replace("\n", "")
                            .toInt()==1);
             cpuN->setChecked(online);
+            setParametersEnabled(online);
         } else if ( job->data().value("filename")=="available_governors" ) {
             QStringList avail_gov = job->data().value("contents")
                     .toString().replace("\n", "").split(" ");
             avail_gov.removeAll("");
             governors->addItems(avail_gov);
+            for (uint i=0; i<governors->count(); i++) {
+                governors->setItemIcon(
+                            i, QIcon::fromTheme(governors->currentText()));
+            };
         } else if ( job->data().value("filename")=="available_frequencies" ) {
             QStringList avail_freq = job->data().value("contents")
                     .toString().replace("\n", "").split(" ");
@@ -104,12 +126,12 @@ void CPU_Item::readProcData(const QString &fileName)
     startAction(act);
 }
 
-void CPU_Item::writeProcData(QString &fileName, QString &parametr)
+void CPU_Item::writeProcData(QString &fileName, QString &arg)
 {
     QVariantMap args;
     args["procnumb"] = cpuNumber;
     args["filename"] = fileName;
-    args["parametr"] = parametr;
+    args["parametr"] = arg;
 
     Action act("org.freedesktop.auth.cpufrequtility.write");
     act.setArguments(args);
@@ -125,8 +147,84 @@ void CPU_Item::startAction(Action &act)
         onResult(job);
     } else {
         QMessageBox::information(this, "Error", \
-                    QString("ExecuteJob don't started."));
+                    QString("ExecuteJob don't started.\n%1 : %2")
+                    .arg(job->error()).arg(job->errorText()));
     };
 }
 
+void CPU_Item::emitCurrentParameters()
+{
+    emitCurrentGovernor(governors->currentText());
+    emitCurrentMaxFreq(maxFreq->currentText());
+    emitCurrentMinFreq(minFreq->currentText());
+}
+
+void CPU_Item::emitCurrentGovernor(QString s)
+{
+    if (firstForAll) emit curr_gov(s);
+}
+
+void CPU_Item::emitCurrentMaxFreq(QString s)
+{
+    if (firstForAll) emit max_freq(s);
+}
+
+void CPU_Item::emitCurrentMinFreq(QString s)
+{
+    if (firstForAll) emit min_freq(s);
+}
+
 /* public slots */
+void CPU_Item::setFirstForAllState(bool state)
+{
+    bool changed = ( firstForAll!=state );
+    firstForAll = state;
+    if (cpuNumber=="0" && changed) emitCurrentParameters();
+}
+
+void CPU_Item::applyNewSettings()
+{
+    QStringList keys;
+    keys.append("governor");
+    keys.append("max_freq");
+    keys.append("min_freq");
+    if ( online != cpuN->isChecked() ) {
+        if (!online) keys.prepend("online");
+        else keys.append("online");
+    } else if (!online) return;
+    foreach (QString key, keys) {
+        if (cpuNumber=="0" && key=="online" ) {
+            // cpu0 always present and online
+        } else {
+            QString arg;
+            if ( key=="online" ) {
+                arg = QString::number(cpuN->isChecked()? 1:0);
+            } else if ( key=="governor" ) {
+                arg = governors->currentText();
+            } else if ( key=="max_freq" ) {
+                arg = maxFreq->currentText();
+            } else if ( key=="min_freq" ) {
+                arg = minFreq->currentText();
+            } else continue;
+            writeProcData(key, arg);
+        };
+    };
+}
+
+void CPU_Item::setCurrGovernor(QString &arg)
+{
+    int idx = governors->findText(arg);
+    if (!(idx<0)) governors->setCurrentIndex(idx);
+}
+
+void CPU_Item::setCurrMaxFreq(QString &arg)
+{
+    int idx = maxFreq->findText(arg);
+    if (!(idx<0)) maxFreq->setCurrentIndex(idx);
+}
+
+void CPU_Item::setCurrMinFreq(QString &arg)
+{
+    int idx = minFreq->findText(arg);
+    if (!(idx<0)) minFreq->setCurrentIndex(idx);
+}

@@ -33,6 +33,10 @@ private slots:
     void                setFirstForAll(bool);
     void                reloadCPUItems();
     void                applyChanges();
+
+    void                receiveCurrGovernor(QString&);
+    void                receiveCurrMaxFreq(QString&);
+    void                receiveCurrMinFreq(QString&);
 };
 
 #endif // MAINWINDOW_H
