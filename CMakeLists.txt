@@ -9,3 +9,6 @@ project (kf5-cpufrequtility)
 
 find_package(KF5Auth REQUIRED)
 add_subdirectory(src)
+
+install ( FILES       ${PROJECT_NAME}.desktop
+          DESTINATION ${SHARE_INSTALL_PREFIX}/applications )

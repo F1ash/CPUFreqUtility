@@ -1,17 +1,22 @@
 %define cmake_build_dir build-cmake
 
-Name:        kf5-cpufrequtility
-Version:     1.0
-Release:     1%{?dist}
-Summary:     CPU Frequence Utility
-Summary(ru): Утилита для управления режимом работы процессора
-Group:       Applications/System
-License:     GPL2+
-Source0:     https://github.com/F1ash/%{name}/archive/%{version}.tar.gz 
-URL:         https://github.com/F1ash/%{name}
+Name:          kf5-cpufrequtility
+Version:       1.0
+Release:       1%{?dist}
+Summary:       CPU Frequence Utility
+Summary(ru):   Утилита для управления режимом работы процессора
+Group:         Applications/System
+License:       GPL2+
+Source0:       https://github.com/F1ash/%{name}/archive/%{version}.tar.gz 
+URL:           https://github.com/F1ash/%{name}
 
-Requires: qt5-qtbase, kf5-kauth
-BuildRequires: qt5-qtbase-devel, kf5-kauth-devel, extra-cmake-modules
+Requires:      qt5-qtbase
+Requires:      kf5-kauth
+
+BuildRequires: desktop-file-utils
+BuildRequires: qt5-qtbase-devel
+BuildRequires: kf5-kauth-devel
+BuildRequires: extra-cmake-modules
 
 %description
 kf5-cpufrequtility

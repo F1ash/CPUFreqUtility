@@ -1,9 +1,6 @@
 
 add_subdirectory(helper)
 
-set (SOURCES_DIRS . src)
-include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
-
 set(HEADERS
     mainwindow.h
     cpu_item.h
@@ -15,7 +12,6 @@ set(SOURCES
     cpu_item.cpp
     toolbar.cpp
     tray/traywidget.cpp)
-set(CFH_DESKTOP_FILE ${PROJECT_NAME}.desktop)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
@@ -34,5 +30,3 @@ target_link_libraries(${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 
 install ( TARGETS     ${PROJECT_NAME}
           DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
-install ( FILES       ${CFH_DESKTOP_FILE}
-          DESTINATION ${SHARE_INSTALL_PREFIX}/applications )
