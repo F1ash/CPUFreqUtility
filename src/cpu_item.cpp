@@ -83,7 +83,7 @@ void CPU_Item::onResult(ExecuteJob *job)
                     .toString().replace("\n", "").split(" ");
             avail_gov.removeAll("");
             governors->addItems(avail_gov);
-            for (uint i=0; i<governors->count(); i++) {
+            for (int i=0; i<governors->count(); i++) {
                 governors->setItemIcon(
                             i, QIcon::fromTheme(governors->currentText()));
             };

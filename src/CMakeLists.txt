@@ -31,5 +31,5 @@ target_link_libraries(${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 
 install ( TARGETS     ${PROJECT_NAME}
           DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
-install ( FILES CFH_DESKTOP_FILE
+install ( FILES       ${CFH_DESKTOP_FILE}
           DESTINATION ${SHARE_INSTALL_PREFIX}/applications )

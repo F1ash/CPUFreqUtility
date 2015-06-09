@@ -31,12 +31,12 @@ ToolBar::ToolBar(QWidget *parent) :
 
 bool ToolBar::getFirstForAllState() const
 {
-    firstForAll->isChecked();
+    return firstForAll->isChecked();
 }
 
 bool ToolBar::getRestoreState() const
 {
-    restore->isChecked();
+    return restore->isChecked();
 }
 
 void ToolBar::setFirstForAllState(bool state)

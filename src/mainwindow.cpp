@@ -44,7 +44,7 @@ void MainWindow::initTrayIcon()
 void MainWindow::initCPU_Items(QStringList &cpus)
 {
     if (baseLayout!=NULL) {
-        for (uint i=0; i<baseLayout->count(); i++) {
+        for (int i=0; i<baseLayout->count(); i++) {
             CPU_Item *wdg = static_cast<CPU_Item*>(
                         baseLayout->itemAt(i)->widget());
             if ( NULL!=wdg && i==0 ) {
@@ -140,7 +140,7 @@ void MainWindow::readCPUCount()
 
 void MainWindow::setFirstForAll(bool state)
 {
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -159,7 +159,7 @@ void MainWindow::applyChanges()
 {
     toolBar->setEnabled(false);
     baseWdg->setEnabled(false);
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -172,7 +172,7 @@ void MainWindow::applyChanges()
 
 void MainWindow::receiveCurrGovernor(QString &arg)
 {
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -182,7 +182,7 @@ void MainWindow::receiveCurrGovernor(QString &arg)
 
 void MainWindow::receiveCurrMaxFreq(QString &arg)
 {
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -192,7 +192,7 @@ void MainWindow::receiveCurrMaxFreq(QString &arg)
 
 void MainWindow::receiveCurrMinFreq(QString &arg)
 {
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -256,7 +256,7 @@ void MainWindow::saveSettings()
     settings.setValue("Restore", toolBar->getRestoreState());
     settings.setValue("FirstForAll", toolBar->getFirstForAllState());
     settings.beginGroup("CPUs");
-    for (uint i=0; i<baseLayout->count(); i++) {
+    for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg ) {
