@@ -180,6 +180,7 @@ void CPU_Item::setFirstForAllState(bool state)
     bool changed = ( firstForAll!=state );
     firstForAll = state;
     if (cpuNumber=="0" && changed) emitCurrentParameters();
+    else if (changed) setParametersEnabled(!state);
 }
 
 void CPU_Item::applyNewSettings()
@@ -227,4 +228,29 @@ void CPU_Item::setCurrMinFreq(QString &arg)
 {
     int idx = minFreq->findText(arg);
     if (!(idx<0)) minFreq->setCurrentIndex(idx);
+}
+
+bool CPU_Item::getOnlineState() const
+{
+    return cpuN->isChecked();
+}
+
+QString CPU_Item::getGovernor() const
+{
+    return governors->currentText();
+}
+
+QString CPU_Item::getMaxFreq() const
+{
+    return maxFreq->currentText();
+}
+
+QString CPU_Item::getMinFreq() const
+{
+    return minFreq->currentText();
+}
+
+QString CPU_Item::getCPUNumber() const
+{
+    return cpuNumber;
 }

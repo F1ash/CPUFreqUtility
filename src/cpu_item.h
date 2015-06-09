@@ -51,6 +51,11 @@ public slots:
     void             setCurrGovernor(QString&);
     void             setCurrMaxFreq(QString&);
     void             setCurrMinFreq(QString&);
+    bool             getOnlineState() const;
+    QString          getGovernor() const;
+    QString          getMaxFreq() const;
+    QString          getMinFreq() const;
+    QString          getCPUNumber() const;
 };
 
 #endif // CPU_ITEM_H

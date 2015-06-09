@@ -12,12 +12,22 @@ public:
     explicit ToolBar(QWidget *parent = NULL);
     QPushButton      *firstForAll,
                      *reload,
-                     *apply;
+                     *restore,
+                     *apply,
+                     *exit;
 
 private:
     QAction          *firstForAllAct,
                      *reloadAct,
-                     *applyAct;
+                     *restoreAct,
+                     *applyAct,
+                     *exitAct;
+
+public slots:
+    bool              getFirstForAllState() const;
+    bool              getRestoreState() const;
+    void              setFirstForAllState(bool);
+    void              setRestoreState(bool);
 };
 
 #endif // TOOLBAR_H

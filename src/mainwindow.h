@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <QSettings>
+#include <QCloseEvent>
+#include <QTimer>
 #include "tray/traywidget.h"
 #include "cpu_item.h"
 #include "toolbar.h"
@@ -16,6 +19,8 @@ public:
 signals:
 
 private:
+    uint                CPU_COUNT;
+    QSettings           settings;
     ToolBar            *toolBar;
     TrayIcon           *trayIcon;
     QVBoxLayout        *baseLayout;
@@ -37,6 +42,10 @@ private slots:
     void                receiveCurrGovernor(QString&);
     void                receiveCurrMaxFreq(QString&);
     void                receiveCurrMinFreq(QString&);
+
+    void                closeEvent(QCloseEvent*);
+    void                readSettings();
+    void                saveSettings();
 };
 
 #endif // MAINWINDOW_H

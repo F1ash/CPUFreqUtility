@@ -1,0 +1,3 @@
+v1.0 :
+implemented management of CPU parameters
+    (governor, max/min frequence per core);

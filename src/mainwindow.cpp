@@ -15,25 +15,32 @@ MainWindow::MainWindow(QWidget *parent) :
     addToolBar(toolBar);
     baseLayout = NULL;
     baseWdg = NULL;
-    //hide();
+    CPU_COUNT = 0;
     initTrayIcon();
-    readCPUCount();
+    readSettings();
     connect(toolBar->firstForAll, SIGNAL(toggled(bool)),
             this, SLOT(setFirstForAll(bool)));
     connect(toolBar->reload, SIGNAL(released()),
             this, SLOT(reloadCPUItems()));
     connect(toolBar->apply, SIGNAL(released()),
             this, SLOT(applyChanges()));
+    connect(toolBar->exit, SIGNAL(released()),
+            this, SLOT(close()));
+    QTimer::singleShot(10000, this, SLOT(changeVisibility()));
 }
+
 void MainWindow::initTrayIcon()
 {
     trayIcon = new TrayIcon(this);
-    trayIcon->setIcon(QIcon::fromTheme("performance"));
-    trayIcon->setToolTip("CPU Frequence Utility");
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(trayIcon->hideAction, SIGNAL(triggered(bool)),
+            this, SLOT(changeVisibility()));
+    connect(trayIcon->closeAction, SIGNAL(triggered(bool)),
+            this, SLOT(close()));
     trayIcon->show();
 }
+
 void MainWindow::initCPU_Items(QStringList &cpus)
 {
     if (baseLayout!=NULL) {
@@ -56,6 +63,7 @@ void MainWindow::initCPU_Items(QStringList &cpus)
         delete baseWdg;
         baseWdg = NULL;
     };
+    CPU_COUNT = cpus.count();
     baseLayout = new QVBoxLayout();
     baseWdg = new QWidget(this);
     foreach (QString cpuNum, cpus) {
@@ -72,6 +80,7 @@ void MainWindow::initCPU_Items(QStringList &cpus)
     };
     baseWdg->setLayout(baseLayout);
     setCentralWidget(baseWdg);
+    setFirstForAll(toolBar->getFirstForAllState());
 }
 
 void MainWindow::changeVisibility()
@@ -82,7 +91,6 @@ void MainWindow::changeVisibility()
         trayIcon->hideAction->setIcon (QIcon::fromTheme("go-up"));
     } else {
         this->show();
-        //this->move(mapToGlobal(QCursor::pos()));
         trayIcon->hideAction->setText (QString("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("go-down"));
     };
@@ -190,4 +198,77 @@ void MainWindow::receiveCurrMinFreq(QString &arg)
         if ( NULL!=wdg )
             wdg->setCurrMinFreq(arg);
     };
+}
+
+void MainWindow::closeEvent(QCloseEvent *ev)
+{
+    if ( ev->type()==QEvent::Close ) {
+        saveSettings();
+        ev->accept();
+    };
+}
+
+void MainWindow::readSettings()
+{
+    bool firstForAll, restore;
+    firstForAll = settings.value("FirstForAll", false).toBool();
+    restore = settings.value("Restore", false).toBool();
+    toolBar->setFirstForAllState(firstForAll);
+    toolBar->setRestoreState(restore);
+    if (restore) {
+        settings.beginGroup("CPUs");
+        QStringList cpus = settings.childGroups();
+        CPU_COUNT = cpus.count();
+        baseLayout = new QVBoxLayout();
+        baseWdg = new QWidget(this);
+        foreach (QString cpuName, cpus) {
+            settings.beginGroup(cpuName);
+            QString cpuNum = settings.value("Number", "0").toString();
+            CPU_Item *wdg = new CPU_Item(this, cpuNum);
+            QString curr_gov, max_freq, min_freq;
+            curr_gov = settings.value("Governor", "default").toString();
+            max_freq = settings.value("MaxFreq", "0").toString();
+            min_freq = settings.value("MinFreq", "0").toString();
+            wdg->setCurrGovernor(curr_gov);
+            wdg->setCurrMaxFreq(max_freq);
+            wdg->setCurrMinFreq(min_freq);
+            baseLayout->addWidget(wdg);
+            if ( cpuNum=="0" ) {
+                connect(wdg, SIGNAL(curr_gov(QString&)),
+                        this, SLOT(receiveCurrGovernor(QString&)));
+                connect(wdg, SIGNAL(max_freq(QString&)),
+                        this, SLOT(receiveCurrMaxFreq(QString&)));
+                connect(wdg, SIGNAL(min_freq(QString&)),
+                        this, SLOT(receiveCurrMinFreq(QString&)));
+            };
+            settings.endGroup();
+        };
+        settings.endGroup();
+        baseWdg->setLayout(baseLayout);
+        setCentralWidget(baseWdg);
+        setFirstForAll(firstForAll);
+    } else
+        readCPUCount();
+}
+
+void MainWindow::saveSettings()
+{
+    settings.setValue("Restore", toolBar->getRestoreState());
+    settings.setValue("FirstForAll", toolBar->getFirstForAllState());
+    settings.beginGroup("CPUs");
+    for (uint i=0; i<baseLayout->count(); i++) {
+        CPU_Item *wdg = static_cast<CPU_Item*>(
+                    baseLayout->itemAt(i)->widget());
+        if ( NULL!=wdg ) {
+            settings.beginGroup(QString("CPU%1").arg(i));
+            settings.setValue("Number", wdg->getCPUNumber());
+            settings.setValue("Online", wdg->getOnlineState());
+            settings.setValue("Governor", wdg->getGovernor());
+            settings.setValue("MaxFreq", wdg->getMaxFreq());
+            settings.setValue("MinFreq", wdg->getMinFreq());
+            settings.endGroup();
+        };
+    };
+    settings.endGroup();
+    settings.sync();
 }
