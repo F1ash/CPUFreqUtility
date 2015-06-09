@@ -1,6 +1,9 @@
 
 add_subdirectory(helper)
 
+set (SOURCES_DIRS . src)
+include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
+
 set(HEADERS
     mainwindow.h
     cpu_item.h
