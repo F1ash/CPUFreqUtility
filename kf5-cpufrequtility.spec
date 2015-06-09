@@ -5,7 +5,7 @@ Version:     1.0
 Release:     1%{?dist}
 Summary:     CPU Frequence Utility
 Summary(ru): Утилита для управления режимом работы процессора
-Group:       Applications/Utility
+Group:       Applications/System
 License:     GPL2+
 Source0:     https://github.com/F1ash/%{name}/archive/%{version}.tar.gz 
 URL:         https://github.com/F1ash/%{name}
