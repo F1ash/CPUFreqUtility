@@ -54,10 +54,11 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/system-services/org.freedesktop.auth.cpufrequtility.service
 %{_datadir}/polkit-1/actions/org.freedesktop.auth.cpufrequtility.policy
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.auth.cpufrequtility.conf
+%{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
 * Wed Jun 10 2015 Fl@sh <kaperang07@gmail.com> - 1.1-1
-- added kf5-knotifications R, BR;
+- added kf5-knotifications R, BR, %%files;
 
 * Tue Jun  9 2015 Fl@sh <kaperang07@gmail.com> - 1.0-1
 - Initial build
