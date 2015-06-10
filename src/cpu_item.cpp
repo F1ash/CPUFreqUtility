@@ -15,10 +15,10 @@ CPU_Item::CPU_Item(QWidget *parent, QString num) :
     governors->setToolTip("Governor");
     governors->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     minFreq = new QComboBox(this);
-    minFreq->setToolTip("Minimal Frequence");
+    minFreq->setToolTip("Minimal Frequence (MGz)");
     minFreq->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     maxFreq = new QComboBox(this);
-    maxFreq->setToolTip("Maximal Frequence");
+    maxFreq->setToolTip("Maximal Frequence (MGz)");
     maxFreq->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     baseLayout = new QHBoxLayout(this);
     baseLayout->addWidget(cpuN);
@@ -66,11 +66,21 @@ void CPU_Item::setItemData()
 
 void CPU_Item::onResult(ExecuteJob *job)
 {
-    if (NULL==job) return;
+    if (NULL==job) {
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("Processing with CPU data failed."),
+                    this);
+        return;
+    };
     if (job->error()) {
-        QMessageBox::information(this, "Error", \
-                    QString("KAuth returned an error code: %1 \n %2")
-                    .arg(job->error()).arg(job->errorText()));
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("ERROR: %1\n%2")
+                    .arg(job->error()).arg(job->errorText()),
+                    this);
     } else if ( job->data().keys().contains("filename") ) {
         if ( job->data().value("filename")=="online" ) {
             online = (job->data().value("contents")
@@ -82,17 +92,28 @@ void CPU_Item::onResult(ExecuteJob *job)
             QStringList avail_gov = job->data().value("contents")
                     .toString().replace("\n", "").split(" ");
             avail_gov.removeAll("");
+            avail_gov.prepend("undefined");
             governors->addItems(avail_gov);
             for (int i=0; i<governors->count(); i++) {
+                QString gov_Icon = governors->itemText(i);
+                if (gov_Icon=="undefined") gov_Icon="dialog-error";
                 governors->setItemIcon(
-                            i, QIcon::fromTheme(governors->currentText()));
+                            i,
+                            QIcon::fromTheme(
+                                gov_Icon,
+                                QIcon(QString(":/%1.png")
+                                      .arg(gov_Icon))));
             };
         } else if ( job->data().value("filename")=="available_frequencies" ) {
             QStringList avail_freq = job->data().value("contents")
                     .toString().replace("\n", "").split(" ");
             avail_freq.removeAll("");
-            minFreq->addItems(avail_freq);
-            maxFreq->addItems(avail_freq);
+            avail_freq.prepend("undefined");
+            foreach (QString freq, avail_freq) {
+                QString text = freq.leftJustified(freq.count()-3, '.', true);
+                minFreq->addItem(text, freq);
+                maxFreq->addItem(text, freq);
+            };
         } else if ( job->data().value("filename")=="governor" ) {
             QString cur_gov = job->data().value("contents")
                     .toString().replace("\n", "");
@@ -100,17 +121,15 @@ void CPU_Item::onResult(ExecuteJob *job)
             if (idx<0) idx=0;
             governors->setCurrentIndex(idx);
         } else if ( job->data().value("filename")=="max_freq" ) {
-            QString _freq = job->data().value("contents")
+            QString freq = job->data().value("contents")
                     .toString().replace("\n", "");
-            int idx = maxFreq->findText(_freq);
-            if (idx<0) idx=0;
-            maxFreq->setCurrentIndex(idx);
+            QString text = freq.leftJustified(freq.count()-3, '.', true);
+            setCurrMaxFreq(text);
         } else if ( job->data().value("filename")=="min_freq" ) {
-            QString _freq = job->data().value("contents")
+            QString freq = job->data().value("contents")
                     .toString().replace("\n", "");
-            int idx = minFreq->findText(_freq);
-            if (idx<0) idx=0;
-            minFreq->setCurrentIndex(idx);
+            QString text = freq.leftJustified(freq.count()-3, '.', true);
+            setCurrMinFreq(text);
         };
     };
 }
@@ -146,9 +165,12 @@ void CPU_Item::startAction(Action &act)
     if (job->exec()) {
         onResult(job);
     } else {
-        QMessageBox::information(this, "Error", \
-                    QString("ExecuteJob don't started.\n%1 : %2")
-                    .arg(job->error()).arg(job->errorText()));
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("ERROR: %1\n%2")
+                    .arg(job->error()).arg(job->errorText()),
+                    this);
     };
 }
 
@@ -203,9 +225,11 @@ void CPU_Item::applyNewSettings()
             } else if ( key=="governor" ) {
                 arg = governors->currentText();
             } else if ( key=="max_freq" ) {
-                arg = maxFreq->currentText();
+                arg = maxFreq->currentData(Qt::UserRole)
+                        .toString();
             } else if ( key=="min_freq" ) {
-                arg = minFreq->currentText();
+                arg = minFreq->currentData(Qt::UserRole)
+                        .toString();
             } else continue;
             writeProcData(key, arg);
         };

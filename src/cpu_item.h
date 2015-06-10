@@ -6,9 +6,9 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
-#include <QMessageBox>
 #include <QDebug>
 #include <kauth.h>
+#include <knotification.h>
 using namespace KAuth;
 
 class CPU_Item : public QWidget

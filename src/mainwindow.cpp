@@ -3,6 +3,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    Q_INIT_RESOURCE(cpufreq_icons);
     setWindowFlags(windowFlags() ^ Qt::FramelessWindowHint);
     setSizePolicy(
                 QSizePolicy(
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("CPU Frequence Utility");
+    QIcon::setThemeName("CPUFreq");
     toolBar = new ToolBar(this);
     addToolBar(toolBar);
     baseLayout = NULL;
@@ -103,11 +105,21 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 
 void MainWindow::onResult(ExecuteJob *job)
 {
-    if (NULL==job) return;
+    if (NULL==job) {
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("Processing with CPU data failed."),
+                    this);
+        return;
+    };
     if (job->error()) {
-        QMessageBox::information(this, "Error", \
-                    QString("KAuth returned an error code: %1 \n %2")
-                    .arg(job->error()).arg(job->errorText()));
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("ERROR: %1\n%2")
+                    .arg(job->error()).arg(job->errorText()),
+                    this);
     } else if ( job->data().keys().contains("filename") ) {
         if ( job->data().value("filename")=="present" ) {
             QStringList cpus = job->data()
@@ -132,9 +144,12 @@ void MainWindow::readCPUCount()
     if (job->exec()) {
         onResult(job);
     } else {
-        QMessageBox::information(this, "Error", \
-                    QString("ExecuteJob don't started.\n%1 : %2")
-                    .arg(job->error()).arg(job->errorText()));
+        KNotification::event(
+                    KNotification::Notification,
+                    "CPUFreqUtility",
+                    QString("ERROR: %1\n%2")
+                    .arg(job->error()).arg(job->errorText()),
+                    this);
     };
 }
 
@@ -213,12 +228,13 @@ void MainWindow::readSettings()
     bool firstForAll, restore;
     firstForAll = settings.value("FirstForAll", false).toBool();
     restore = settings.value("Restore", false).toBool();
-    toolBar->setFirstForAllState(firstForAll);
     toolBar->setRestoreState(restore);
-    if (restore) {
-        settings.beginGroup("CPUs");
-        QStringList cpus = settings.childGroups();
-        CPU_COUNT = cpus.count();
+    settings.beginGroup("CPUs");
+    QStringList cpus = settings.childGroups();
+    CPU_COUNT = cpus.count();
+    if (restore && CPU_COUNT) {
+        // set FirstForAll only if app restote data
+        toolBar->setFirstForAllState(firstForAll);
         baseLayout = new QVBoxLayout();
         baseWdg = new QWidget(this);
         foreach (QString cpuName, cpus) {
@@ -226,9 +242,9 @@ void MainWindow::readSettings()
             QString cpuNum = settings.value("Number", "0").toString();
             CPU_Item *wdg = new CPU_Item(this, cpuNum);
             QString curr_gov, max_freq, min_freq;
-            curr_gov = settings.value("Governor", "default").toString();
-            max_freq = settings.value("MaxFreq", "0").toString();
-            min_freq = settings.value("MinFreq", "0").toString();
+            curr_gov = settings.value("Governor", "undefined").toString();
+            max_freq = settings.value("MaxFreq", "undefined").toString();
+            min_freq = settings.value("MinFreq", "undefined").toString();
             wdg->setCurrGovernor(curr_gov);
             wdg->setCurrMaxFreq(max_freq);
             wdg->setCurrMinFreq(min_freq);
@@ -243,12 +259,12 @@ void MainWindow::readSettings()
             };
             settings.endGroup();
         };
-        settings.endGroup();
         baseWdg->setLayout(baseLayout);
         setCentralWidget(baseWdg);
         setFirstForAll(firstForAll);
     } else
         readCPUCount();
+    settings.endGroup();
 }
 
 void MainWindow::saveSettings()

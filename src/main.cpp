@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
     QString name("CPUFreqUtility");
     a.setOrganizationName(name);
     a.setApplicationName(name);
-    QIcon::setThemeName("CPUFreq");
     MainWindow w;
     w.show();
 

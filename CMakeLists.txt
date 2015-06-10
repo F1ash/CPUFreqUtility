@@ -7,7 +7,8 @@ cmake_policy(SET CMP0037 OLD)
 
 project (kf5-cpufrequtility)
 
-find_package(KF5Auth REQUIRED)
+find_package(KF5Auth          REQUIRED)
+find_package(KF5Notifications REQUIRED)
 add_subdirectory(src)
 
 install ( FILES       ${PROJECT_NAME}.desktop

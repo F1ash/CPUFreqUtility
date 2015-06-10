@@ -1,7 +1,7 @@
 %define cmake_build_dir build-cmake
 
 Name:          kf5-cpufrequtility
-Version:       1.0
+Version:       1.1
 Release:       1%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
@@ -12,10 +12,12 @@ URL:           https://github.com/F1ash/%{name}
 
 Requires:      qt5-qtbase
 Requires:      kf5-kauth
+Requires:      kf5-knotifications
 
 BuildRequires: desktop-file-utils
 BuildRequires: qt5-qtbase-devel
 BuildRequires: kf5-kauth-devel
+BuildRequires: kf5-knotifications-devel
 BuildRequires: extra-cmake-modules
 
 %description
@@ -54,5 +56,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.auth.cpufrequtility.conf
 
 %changelog
+* Wed Jun 10 2015 Fl@sh <kaperang07@gmail.com> - 1.1-1
+- added kf5-knotifications R, BR;
+
 * Tue Jun  9 2015 Fl@sh <kaperang07@gmail.com> - 1.0-1
 - Initial build

@@ -1,8 +1,4 @@
 
-find_package(ECM REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_DIR} ${ECM_KDE_MODULE_DIR})
-include(KDEInstallDirs)
-
 set(cpu_freq_helper_SRCS
     cpu_freq_helper.cpp)
 

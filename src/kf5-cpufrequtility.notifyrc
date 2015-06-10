@@ -1,0 +1,4 @@
+[Global]
+IconName=cpu
+Comment=CPU Frequence Utility
+Name=CPUFreqUtility
