@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <RCC>
-    <qresource prefix="icons/CPUFreq">
+    <qresource prefix="/">
         <file alias="index.theme">icons/index.theme</file>
-        <file alias="64x64/status/conservative.png">icons/64x64/status/conservative.png</file>
-        <file alias="64x64/status/ondemand.png">icons/64x64/status/ondemand.png</file>
-        <file alias="64x64/status/performance.png">icons/64x64/status/performance.png</file>
-        <file alias="64x64/status/powersave.png">icons/64x64/status/powersave.png</file>
+        <file alias="conservative.png">icons/64x64/status/conservative.png</file>
+        <file alias="ondemand.png">icons/64x64/status/ondemand.png</file>
+        <file alias="performance.png">icons/64x64/status/performance.png</file>
+        <file alias="powersave.png">icons/64x64/status/powersave.png</file>
     </qresource>
 </RCC>

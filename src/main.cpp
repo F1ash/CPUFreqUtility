@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(cpufreq_icons);
     QApplication a(argc, argv);
     QString name("CPUFreqUtility");
     a.setOrganizationName(name);

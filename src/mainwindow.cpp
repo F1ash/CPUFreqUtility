@@ -1,9 +1,9 @@
 #include "mainwindow.h"
+#include <QtGui>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    Q_INIT_RESOURCE(cpufreq_icons);
     setWindowFlags(windowFlags() ^ Qt::FramelessWindowHint);
     setSizePolicy(
                 QSizePolicy(
@@ -78,6 +78,13 @@ void MainWindow::initCPU_Items(QStringList &cpus)
                     this, SLOT(receiveCurrMaxFreq(QString&)));
             connect(wdg, SIGNAL(min_freq(QString&)),
                     this, SLOT(receiveCurrMinFreq(QString&)));
+            QString gov_Icon =
+                    wdg->getGovernor();
+            trayIcon->setIcon(
+                        QIcon::fromTheme(
+                            gov_Icon,
+                            QIcon(QString(":/%1.png")
+                                  .arg(gov_Icon))));
         };
     };
     baseWdg->setLayout(baseLayout);
@@ -187,7 +194,7 @@ void MainWindow::applyChanges()
 
 void MainWindow::receiveCurrGovernor(QString &arg)
 {
-    for (int i=0; i<baseLayout->count(); i++) {
+    for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -197,7 +204,7 @@ void MainWindow::receiveCurrGovernor(QString &arg)
 
 void MainWindow::receiveCurrMaxFreq(QString &arg)
 {
-    for (int i=0; i<baseLayout->count(); i++) {
+    for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -207,7 +214,7 @@ void MainWindow::receiveCurrMaxFreq(QString &arg)
 
 void MainWindow::receiveCurrMinFreq(QString &arg)
 {
-    for (int i=0; i<baseLayout->count(); i++) {
+    for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
         if ( NULL!=wdg )
@@ -220,6 +227,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
     if ( ev->type()==QEvent::Close ) {
         saveSettings();
         ev->accept();
+        qApp->quit();
     };
 }
 
@@ -256,6 +264,13 @@ void MainWindow::readSettings()
                         this, SLOT(receiveCurrMaxFreq(QString&)));
                 connect(wdg, SIGNAL(min_freq(QString&)),
                         this, SLOT(receiveCurrMinFreq(QString&)));
+                QString gov_Icon =
+                        wdg->getGovernor();
+                trayIcon->setIcon(
+                            QIcon::fromTheme(
+                                gov_Icon,
+                                QIcon(QString(":/%1.png")
+                                      .arg(gov_Icon))));
             };
             settings.endGroup();
         };
