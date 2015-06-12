@@ -1,3 +1,7 @@
 v1.0 :
 implemented management of CPU parameters
     (governor, max/min frequence per core);
+
+v.1.1.1 :
+implemented notifications;
+fixed the usage of icons;
