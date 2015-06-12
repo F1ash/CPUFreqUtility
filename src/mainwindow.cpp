@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include <QtGui>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -226,8 +225,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         saveSettings();
+        trayIcon->hide();
         ev->accept();
-        qApp->quit();
     };
 }
 
