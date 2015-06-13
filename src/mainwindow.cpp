@@ -27,7 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(applyChanges()));
     connect(toolBar->exit, SIGNAL(released()),
             this, SLOT(close()));
-    QTimer::singleShot(10000, this, SLOT(changeVisibility()));
+    timerID = 0;
+    setFocusPolicy(Qt::WheelFocus);
 }
 
 void MainWindow::initTrayIcon()
@@ -301,4 +302,30 @@ void MainWindow::saveSettings()
     };
     settings.endGroup();
     settings.sync();
+}
+
+void MainWindow::focusInEvent(QFocusEvent *ev)
+{
+    ev->accept();
+    if (timerID) {
+        killTimer(timerID);
+        timerID = 0;
+    }
+}
+
+void MainWindow::focusOutEvent(QFocusEvent *ev)
+{
+    ev->accept();
+    if (timerID==0) {
+        timerID = startTimer(25000);
+    }
+}
+
+void MainWindow::timerEvent(QTimerEvent *ev)
+{
+    if ( ev->timerId()==timerID ) {
+        killTimer(timerID);
+        timerID = 0;
+        hide();
+    }
 }

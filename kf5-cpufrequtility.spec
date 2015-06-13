@@ -1,7 +1,7 @@
 %define cmake_build_dir build-cmake
 
 Name:          kf5-cpufrequtility
-Version:       1.1.1
+Version:       1.1.2
 Release:       1%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
@@ -57,6 +57,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
+* Sat Jun 13 2015 Fl@sh <kaperang07@gmail.com> - 1.1.2-1
+- version updated;
+
 * Fri Jun 12 2015 Fl@sh <kaperang07@gmail.com> - 1.1.1-1
 - version updated;
 

@@ -5,3 +5,6 @@ implemented management of CPU parameters
 v.1.1.1 :
 implemented notifications;
 fixed the usage of icons;
+
+v.1.1.2 :
+added autoclose when the app focus is lost;

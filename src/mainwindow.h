@@ -5,7 +5,8 @@
 #include <QVBoxLayout>
 #include <QSettings>
 #include <QCloseEvent>
-#include <QTimer>
+#include <QFocusEvent>
+#include <QTimerEvent>
 #include "tray/traywidget.h"
 #include "cpu_item.h"
 #include "toolbar.h"
@@ -20,6 +21,7 @@ signals:
 
 private:
     uint                CPU_COUNT;
+    int                 timerID;
     QSettings           settings;
     ToolBar            *toolBar;
     TrayIcon           *trayIcon;
@@ -46,6 +48,9 @@ private slots:
     void                closeEvent(QCloseEvent*);
     void                readSettings();
     void                saveSettings();
+    void                focusInEvent(QFocusEvent*);
+    void                focusOutEvent(QFocusEvent*);
+    void                timerEvent(QTimerEvent*);
 };
 
 #endif // MAINWINDOW_H
