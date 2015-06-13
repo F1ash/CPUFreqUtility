@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(close()));
     timerID = 0;
     setFocusPolicy(Qt::WheelFocus);
+    setFocus();
 }
 
 void MainWindow::initTrayIcon()
