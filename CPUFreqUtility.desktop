@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=CPUFreq Utility
+Name=CPUFreqUtility
 GenericName=CPU Frequence Utility
 Type=Application
 Categories=Utility;System;Qt;
 Icon=cpu
-Exec=kf5-cpufrequtility
+Exec=CPUFreqUtility
 Terminal=false
 StartupNotify=true

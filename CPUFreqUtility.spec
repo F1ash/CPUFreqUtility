@@ -1,13 +1,13 @@
 %define cmake_build_dir build-cmake
 
-Name:          kf5-cpufrequtility
+Name:          CPUFreqUtility
 Version:       1.1.2
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
 Group:         Applications/System
 License:       GPL2+
-Source0:       https://github.com/F1ash/%{name}/archive/%{version}.tar.gz 
+Source0:       https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:           https://github.com/F1ash/%{name}
 
 Requires:      qt5-qtbase
@@ -21,12 +21,12 @@ BuildRequires: kf5-knotifications-devel
 BuildRequires: extra-cmake-modules
 
 %description
-kf5-cpufrequtility
-CPU Frequence Utility.
+CPUFreqUtility
+KDE Utility is managed the CPU work mode
 
 %description -l ru
-kf5-cpufrequtility
-Утилита для управления режимом работы процессора.
+CPUFreqUtility
+KDE Утилита для управления режимом работы процессора
 
 %prep
 %setup -q
@@ -57,6 +57,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
+* Sun Jun 14 2015 Fl@sh <kaperang07@gmail.com> - 1.1.2-2
+- package renamed;
+
 * Sat Jun 13 2015 Fl@sh <kaperang07@gmail.com> - 1.1.2-1
 - version updated;
 
