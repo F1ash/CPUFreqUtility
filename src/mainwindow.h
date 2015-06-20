@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QScrollArea>
 #include <QVBoxLayout>
 #include <QSettings>
 #include <QCloseEvent>
@@ -20,6 +21,7 @@ public:
 signals:
 
 private:
+    Qt::WindowFlags     flags;
     uint                CPU_COUNT;
     int                 timerID;
     QSettings           settings;
@@ -27,6 +29,7 @@ private:
     TrayIcon           *trayIcon;
     QVBoxLayout        *baseLayout;
     QWidget            *baseWdg;
+    QScrollArea        *scrolled;
 
 private slots:
     void                initTrayIcon();
@@ -40,6 +43,7 @@ private slots:
     void                setFirstForAll(bool);
     void                reloadCPUItems();
     void                applyChanges();
+    void                resizeApp(bool);
 
     void                receiveCurrGovernor(QString&);
     void                receiveCurrMaxFreq(QString&);

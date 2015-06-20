@@ -3,7 +3,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    setWindowFlags(windowFlags() ^ Qt::FramelessWindowHint);
+    flags  = windowFlags();
+    setWindowFlags(flags ^ Qt::FramelessWindowHint);
     setSizePolicy(
                 QSizePolicy(
                     QSizePolicy::MinimumExpanding,
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addToolBar(toolBar);
     baseLayout = NULL;
     baseWdg = NULL;
+    scrolled = NULL;
     CPU_COUNT = 0;
     initTrayIcon();
     readSettings();
@@ -27,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(applyChanges()));
     connect(toolBar->exit, SIGNAL(released()),
             this, SLOT(close()));
+    connect(toolBar->resize, SIGNAL(toggled(bool)),
+            this, SLOT(resizeApp(bool)));
     timerID = 0;
     setFocusPolicy(Qt::WheelFocus);
     setFocus();
@@ -66,6 +70,10 @@ void MainWindow::initCPU_Items(QStringList &cpus)
         delete baseWdg;
         baseWdg = NULL;
     };
+    if (scrolled!=NULL) {
+        delete scrolled;
+        scrolled = NULL;
+    };
     CPU_COUNT = cpus.count();
     baseLayout = new QVBoxLayout();
     baseWdg = new QWidget(this);
@@ -89,7 +97,9 @@ void MainWindow::initCPU_Items(QStringList &cpus)
         };
     };
     baseWdg->setLayout(baseLayout);
-    setCentralWidget(baseWdg);
+    scrolled = new QScrollArea(this);
+    scrolled->setWidget(baseWdg);
+    setCentralWidget(scrolled);
     setFirstForAll(toolBar->getFirstForAllState());
 }
 
@@ -108,7 +118,7 @@ void MainWindow::changeVisibility()
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 {
-  if (r==QSystemTrayIcon::Trigger) changeVisibility();
+    if (r==QSystemTrayIcon::Trigger) changeVisibility();
 }
 
 void MainWindow::onResult(ExecuteJob *job)
@@ -193,6 +203,18 @@ void MainWindow::applyChanges()
     toolBar->setEnabled(true);
 }
 
+void MainWindow::resizeApp(bool state)
+{
+    baseWdg->setEnabled(!state);
+    toolBar->setResizingState(!state);
+    if ( state ) {
+        setWindowFlags(flags);
+    } else {
+        setWindowFlags(flags ^ Qt::FramelessWindowHint);
+    };
+    show();
+}
+
 void MainWindow::receiveCurrGovernor(QString &arg)
 {
     for (int i=1; i<baseLayout->count(); i++) {
@@ -235,6 +257,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 void MainWindow::readSettings()
 {
     bool firstForAll, restore;
+    restoreGeometry(settings.value("Geometry").toByteArray());
     firstForAll = settings.value("FirstForAll", false).toBool();
     restore = settings.value("Restore", false).toBool();
     toolBar->setRestoreState(restore);
@@ -285,6 +308,7 @@ void MainWindow::readSettings()
 
 void MainWindow::saveSettings()
 {
+    settings.setValue("Geometry", saveGeometry());
     settings.setValue("Restore", toolBar->getRestoreState());
     settings.setValue("FirstForAll", toolBar->getFirstForAllState());
     settings.beginGroup("CPUs");

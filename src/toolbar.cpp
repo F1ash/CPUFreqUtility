@@ -23,6 +23,12 @@ ToolBar::ToolBar(QWidget *parent) :
     apply->setToolTip("Apply new Settings");
     applyAct        = addWidget(apply);
     addSeparator();
+    resize      =
+            new QPushButton(QIcon::fromTheme("zoom-fit-best"), "", this);
+    resize->setToolTip("Resize");
+    resize->setCheckable(true);
+    resizeAct       = addWidget(resize);
+    addSeparator();
     exit        =
             new QPushButton(QIcon::fromTheme("application-exit"), "", this);
     exit->setToolTip("Exit");
@@ -47,4 +53,13 @@ void ToolBar::setFirstForAllState(bool state)
 void ToolBar::setRestoreState(bool state)
 {
     restore->setChecked(state);
+}
+
+void ToolBar::setResizingState(bool state)
+{
+    firstForAll->setEnabled(state);
+    reload->setEnabled(state);
+    restore->setEnabled(state);
+    apply->setEnabled(state);
+    exit->setEnabled(state);
 }
