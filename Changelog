@@ -8,3 +8,6 @@ fixed the usage of icons;
 
 v.1.1.2 :
 added autoclose when the app focus is lost;
+
+v.1.2.2 :
+implemented the ability for resizing;

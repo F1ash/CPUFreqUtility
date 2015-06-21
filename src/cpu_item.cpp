@@ -97,6 +97,7 @@ void CPU_Item::onResult(ExecuteJob *job)
             for (int i=0; i<governors->count(); i++) {
                 QString gov_Icon = governors->itemText(i);
                 if (gov_Icon=="undefined") gov_Icon="dialog-error";
+                else if (gov_Icon=="userspace") gov_Icon = "user-idle";
                 governors->setItemIcon(
                             i,
                             QIcon::fromTheme(

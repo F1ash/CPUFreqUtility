@@ -89,6 +89,8 @@ void MainWindow::initCPU_Items(QStringList &cpus)
                     this, SLOT(receiveCurrMinFreq(QString&)));
             QString gov_Icon =
                     wdg->getGovernor();
+            if (gov_Icon=="undefined") gov_Icon="dialog-error";
+            else if (gov_Icon=="userspace") gov_Icon = "user-idle";
             trayIcon->setIcon(
                         QIcon::fromTheme(
                             gov_Icon,
