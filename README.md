@@ -1,12 +1,12 @@
 # CPUFreqUtility
 
-KDE CPU Frequence Utility.\n
+KDE CPU Frequence Utility.
 For Linux, tested on Intel CPU.
 
 Used paths:
 
 # contents available freq*
-(for ex.: 2001 2000 1600 1200 800)\n
+(for ex.: 2001 2000 1600 1200 800)
 /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies
         
 # contents available governor regimes
@@ -16,7 +16,7 @@ Used paths:
 /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
         
 # current freq
-(for ex.: 800)\n
+(for ex.: 800)
 /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
         
 # current max freq
@@ -26,13 +26,13 @@ Used paths:
 /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
         
 # enable\disable(1\0) proc,
-not for cpu0\n
+not for cpu0
 /sys/devices/system/cpu/cpu*/online
         
 # check possible proc
-(for ex.: 0-1)\n
+(for ex.: 0-1)
 /sys/devices/system/cpu/possible
         
 # check present proc
-(for ex.: 0-1)\n
+(for ex.: 0-1)
 /sys/devices/system/cpu/present
