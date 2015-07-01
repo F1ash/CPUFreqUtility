@@ -38,12 +38,13 @@ ActionReply CPUFreqHelper::read(QVariantMap args)
     } else if (filename == "present") {
         file.setFileName("/sys/devices/system/cpu/present");
     } else {
-        file.setFileName("/sys/devices/system/cpu/cpu" + procnumb + "/cpufreq/scaling_" + filename);
+        file.setFileName("/sys/devices/system/cpu/cpu" + procnumb + "/cpufreq/" + filename);
     };
  
     if (!file.open(QIODevice::ReadOnly)) {
         QVariantMap err;
-        err["contents"] = QString("default");
+        err["filename"] = filename;
+        err["contents"] = QString("failed");
         reply.setData(err);
         return reply;
     };

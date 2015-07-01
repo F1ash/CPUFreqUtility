@@ -35,7 +35,9 @@ private:
 
 private slots:
     void             setParametersEnabled(bool);
-    void             setItemData();
+    void             setItemData_I();
+    void             setItemData_II();
+    void             setItemData_III();
     void             onResult(ExecuteJob*);
     void             readProcData(const QString&);
     void             writeProcData(QString&, QString&);
@@ -44,6 +46,8 @@ private slots:
     void             emitCurrentGovernor(QString);
     void             emitCurrentMaxFreq(QString);
     void             emitCurrentMinFreq(QString);
+    void             minFreqChanged(QString);
+    void             maxFreqChanged(QString);
 
 public slots:
     void             setFirstForAllState(bool);

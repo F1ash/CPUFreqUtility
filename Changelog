@@ -11,3 +11,9 @@ added autoclose when the app focus is lost;
 
 v.1.2.2 :
 implemented the ability for resizing;
+
+v.1.4.3 :
+improvements for control a cpu without
+    available_frequencies (like i5);
+fixed search the count of present cpu;
+fixed applying the restored cpu data;

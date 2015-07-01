@@ -142,9 +142,24 @@ void MainWindow::onResult(ExecuteJob *job)
                     this);
     } else if ( job->data().keys().contains("filename") ) {
         if ( job->data().value("filename")=="present" ) {
-            QStringList cpus = job->data()
+            // possible format: 0-3,5-7,12,14-31
+            QStringList cpus, seq;
+            seq = job->data()
                     .value("contents").toString()
-                    .replace("\n", "").split("-");
+                    .replace("\n", "").split(",");
+            foreach (QString _cpu, seq) {
+                if ( _cpu.contains("-") ) {
+                    QStringList _seq = _cpu.split("-");
+                    int _first, _last;
+                    _first = _seq.first().toInt();
+                    _last  = _seq.last().toInt();
+                    while (_first<=_last) {
+                        cpus.append(QString::number(_first));
+                        _first++;
+                    };
+                } else
+                    cpus.append(_cpu);
+            };
             initCPU_Items(cpus);
         };
     };
@@ -267,7 +282,7 @@ void MainWindow::readSettings()
     QStringList cpus = settings.childGroups();
     CPU_COUNT = cpus.count();
     if (restore && CPU_COUNT) {
-        // set FirstForAll only if app restote data
+        // set FirstForAll only if app restore data
         toolBar->setFirstForAllState(firstForAll);
         baseLayout = new QVBoxLayout();
         baseWdg = new QWidget(this);
@@ -303,6 +318,7 @@ void MainWindow::readSettings()
         baseWdg->setLayout(baseLayout);
         setCentralWidget(baseWdg);
         setFirstForAll(firstForAll);
+        applyChanges();
     } else
         readCPUCount();
     settings.endGroup();
