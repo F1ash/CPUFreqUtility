@@ -1,11 +1,10 @@
-%define cmake_build_dir build-cmake
+%global cmake_build_dir build-cmake
 
 Name:          CPUFreqUtility
 Version:       1.4.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
-Group:         Applications/System
 License:       GPL2+
 Source0:       https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:           https://github.com/F1ash/%{name}
@@ -47,7 +46,8 @@ popd
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %files
-%doc README.md COPYING Changelog
+%license COPYING
+%doc README.md Changelog
 %{_bindir}/%{name}
 %{_libexecdir}/kf5/kauth/cpu_freq_helper
 %{_datadir}/applications/%{name}.desktop
@@ -57,6 +57,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
+* Sun Oct 11 2015 Fl@sh <kaperang07@gmail.com> - 1.4.3-2
+- fixed for %%license, %%global, erased Group field;
+- release updated;
+
 * Wed Jul  1 2015 Fl@sh <kaperang07@gmail.com> - 1.4.3-1
 - version updated;
 
