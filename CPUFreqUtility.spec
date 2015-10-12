@@ -5,13 +5,16 @@ Version:       1.4.3
 Release:       2%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
-License:       GPL2+
+License:       GPLv2+
 Source0:       https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:           https://github.com/F1ash/%{name}
 
 Requires:      qt5-qtbase
 Requires:      kf5-kauth
 Requires:      kf5-knotifications
+Requires:      dbus
+Requires:      systemd
+Requires:      polkit
 
 BuildRequires: desktop-file-utils
 BuildRequires: qt5-qtbase-devel
@@ -58,7 +61,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %changelog
 * Sun Oct 11 2015 Fl@sh <kaperang07@gmail.com> - 1.4.3-2
-- fixed for %%license, %%global, erased Group field;
+- fixed for %%license, %%global;
+- erased Group field;
+- fixed License field;
+- added dbus, systemd, polkit R for the files own;
 - release updated;
 
 * Wed Jul  1 2015 Fl@sh <kaperang07@gmail.com> - 1.4.3-1
