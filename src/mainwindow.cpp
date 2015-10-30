@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("CPU Frequence Utility");
-    QIcon::setThemeName("CPUFreq");
     toolBar = new ToolBar(this);
     addToolBar(toolBar);
     baseLayout = NULL;

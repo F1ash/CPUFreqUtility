@@ -1,8 +1,8 @@
 %global cmake_build_dir build-cmake
 
 Name:          CPUFreqUtility
-Version:       1.4.3
-Release:       2%{?dist}
+Version:       1.4.4
+Release:       1%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
 License:       GPLv2+
@@ -60,6 +60,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
+* Fri Oct 30 2015 Fl@sh <kaperang07@gmail.com> - 1.4.4-1
+- version updated;
+
 * Sun Oct 11 2015 Fl@sh <kaperang07@gmail.com> - 1.4.3-2
 - fixed for %%license, %%global;
 - erased Group field;

@@ -17,3 +17,6 @@ improvements for control a cpu without
     available_frequencies (like i5);
 fixed search the count of present cpu;
 fixed applying the restored cpu data;
+
+v.1.4.4 :
+fixed the iconTheme usage;
