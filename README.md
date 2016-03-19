@@ -1,5 +1,7 @@
 # CPUFreqUtility
 
+[![Join the chat at https://gitter.im/F1ash/CPUFreqUtility](https://badges.gitter.im/F1ash/CPUFreqUtility.svg)](https://gitter.im/F1ash/CPUFreqUtility?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 KDE CPU Frequence Utility.
 For Linux, tested on Intel CPU.
 
