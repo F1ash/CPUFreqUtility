@@ -20,3 +20,6 @@ fixed applying the restored cpu data;
 
 v.1.4.4 :
 fixed the iconTheme usage;
+
+v.1.4.5 :
+implemented 'Show at start';

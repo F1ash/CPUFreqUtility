@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = NULL);
+    void                _hide();
+    void                _show();
 
 signals:
 

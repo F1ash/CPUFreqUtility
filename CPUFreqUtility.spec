@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
 
 Name:          CPUFreqUtility
-Version:       1.4.4
+Version:       1.4.5
 Release:       1%{?dist}
 Summary:       CPU Frequence Utility
 Summary(ru):   Утилита для управления режимом работы процессора
@@ -60,6 +60,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/knotifications5/%{name}.notifyrc
 
 %changelog
+* Mon Nov  7 2016 Fl@sh <kaperang07@gmail.com> - 1.4.5-1
+- version updated;
+
 * Fri Oct 30 2015 Fl@sh <kaperang07@gmail.com> - 1.4.4-1
 - version updated;
 

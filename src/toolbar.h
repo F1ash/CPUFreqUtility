@@ -14,22 +14,26 @@ public:
                      *reload,
                      *restore,
                      *apply,
-                     *exit,
-                     *resize;
+                     *showAtStart,
+                     *resize,
+                     *exit;
 
 private:
     QAction          *firstForAllAct,
                      *reloadAct,
                      *restoreAct,
                      *applyAct,
-                     *exitAct,
-                     *resizeAct;
+                     *showAtStartAct,
+                     *resizeAct,
+                     *exitAct;
 
 public slots:
     bool              getFirstForAllState() const;
     bool              getRestoreState() const;
     void              setFirstForAllState(bool);
     void              setRestoreState(bool);
+    bool              getShowAtStartState() const;
+    void              setShowAtStartState(bool);
     void              setResizingState(bool);
 };
 

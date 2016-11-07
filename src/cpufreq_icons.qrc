@@ -6,5 +6,6 @@
         <file alias="ondemand.png">icons/64x64/status/ondemand.png</file>
         <file alias="performance.png">icons/64x64/status/performance.png</file>
         <file alias="powersave.png">icons/64x64/status/powersave.png</file>
+        <file alias="overview.png">icons/64x64/status/overview.png</file>
     </qresource>
 </RCC>

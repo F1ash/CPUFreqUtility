@@ -9,7 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 QSizePolicy(
                     QSizePolicy::MinimumExpanding,
                     QSizePolicy::MinimumExpanding));
-    //setMinimumSize(100, 100);
+    setFocusPolicy(Qt::WheelFocus);
+    setFocus(Qt::MouseFocusReason);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("CPU Frequence Utility");
     toolBar = new ToolBar(this);
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     baseWdg = NULL;
     scrolled = NULL;
     CPU_COUNT = 0;
+    timerID = 0;
     initTrayIcon();
     readSettings();
     connect(toolBar->firstForAll, SIGNAL(toggled(bool)),
@@ -30,9 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(close()));
     connect(toolBar->resize, SIGNAL(toggled(bool)),
             this, SLOT(resizeApp(bool)));
-    timerID = 0;
-    setFocusPolicy(Qt::WheelFocus);
-    setFocus();
+    if ( toolBar->getShowAtStartState() ) {
+        _show();
+    } else {
+        timerID = startTimer(3);
+    };
 }
 
 void MainWindow::initTrayIcon()
@@ -104,17 +108,30 @@ void MainWindow::initCPU_Items(QStringList &cpus)
     setFirstForAll(toolBar->getFirstForAllState());
 }
 
+void MainWindow::_hide()
+{
+    this->hide();
+    trayIcon->hideAction->setText (QString("Up"));
+    trayIcon->hideAction->setIcon (QIcon::fromTheme("go-up"));
+    if ( timerID ) {
+        killTimer(timerID);
+        timerID = 0;
+    }
+}
+
+void MainWindow::_show()
+{
+    this->show();
+    trayIcon->hideAction->setText (QString("Down"));
+    trayIcon->hideAction->setIcon (QIcon::fromTheme("go-down"));
+    if ( timerID==0 ) {
+        timerID = startTimer(25000);
+    }
+}
+
 void MainWindow::changeVisibility()
 {
-    if (this->isVisible()) {
-        this->hide();
-        trayIcon->hideAction->setText (QString("Up"));
-        trayIcon->hideAction->setIcon (QIcon::fromTheme("go-up"));
-    } else {
-        this->show();
-        trayIcon->hideAction->setText (QString("Down"));
-        trayIcon->hideAction->setIcon (QIcon::fromTheme("go-down"));
-    };
+    (this->isVisible()) ? _hide() : _show();
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -272,11 +289,13 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 
 void MainWindow::readSettings()
 {
-    bool firstForAll, restore;
+    bool firstForAll, restore, showAtStart;
     restoreGeometry(settings.value("Geometry").toByteArray());
     firstForAll = settings.value("FirstForAll", false).toBool();
     restore = settings.value("Restore", false).toBool();
     toolBar->setRestoreState(restore);
+    showAtStart = settings.value("ShowAtStart", false).toBool();
+    toolBar->setShowAtStartState(showAtStart);
     settings.beginGroup("CPUs");
     QStringList cpus = settings.childGroups();
     CPU_COUNT = cpus.count();
@@ -326,6 +345,7 @@ void MainWindow::readSettings()
 void MainWindow::saveSettings()
 {
     settings.setValue("Geometry", saveGeometry());
+    settings.setValue("ShowAtStart", toolBar->getShowAtStartState());
     settings.setValue("Restore", toolBar->getRestoreState());
     settings.setValue("FirstForAll", toolBar->getFirstForAllState());
     settings.beginGroup("CPUs");
@@ -349,7 +369,7 @@ void MainWindow::saveSettings()
 void MainWindow::focusInEvent(QFocusEvent *ev)
 {
     ev->accept();
-    if (timerID) {
+    if ( timerID ) {
         killTimer(timerID);
         timerID = 0;
     }
@@ -358,16 +378,16 @@ void MainWindow::focusInEvent(QFocusEvent *ev)
 void MainWindow::focusOutEvent(QFocusEvent *ev)
 {
     ev->accept();
-    if (timerID==0) {
+    if ( timerID==0 ) {
         timerID = startTimer(25000);
     }
 }
 
 void MainWindow::timerEvent(QTimerEvent *ev)
 {
-    if ( ev->timerId()==timerID ) {
+    if ( timerID && ev->timerId()==timerID ) {
         killTimer(timerID);
         timerID = 0;
-        hide();
+        _hide();
     }
 }

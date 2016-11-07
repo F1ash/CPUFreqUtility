@@ -17,22 +17,29 @@ ToolBar::ToolBar(QWidget *parent) :
             new QPushButton(QIcon::fromTheme("document-save"), "", this);
     restore->setToolTip("Restore CPU Settings at start");
     restore->setCheckable(true);
-    restoreAct      = addWidget(restore);
+    restoreAct  = addWidget(restore);
     apply       =
             new QPushButton(QIcon::fromTheme("dialog-ok-apply"), "", this);
     apply->setToolTip("Apply new Settings");
-    applyAct        = addWidget(apply);
+    applyAct    = addWidget(apply);
     addSeparator();
+    showAtStart =
+            new QPushButton(QIcon::fromTheme("overview", QIcon(":/overview.png")),
+                            "",
+                            this);
+    showAtStart->setToolTip("Show at start");
+    showAtStart->setCheckable(true);
+    showAtStartAct = addWidget(showAtStart);
     resize      =
             new QPushButton(QIcon::fromTheme("zoom-fit-best"), "", this);
     resize->setToolTip("Resize");
     resize->setCheckable(true);
-    resizeAct       = addWidget(resize);
+    resizeAct   = addWidget(resize);
     addSeparator();
     exit        =
             new QPushButton(QIcon::fromTheme("application-exit"), "", this);
     exit->setToolTip("Exit");
-    exitAct         = addWidget(exit);
+    exitAct     = addWidget(exit);
 }
 
 bool ToolBar::getFirstForAllState() const
@@ -55,11 +62,22 @@ void ToolBar::setRestoreState(bool state)
     restore->setChecked(state);
 }
 
+bool ToolBar::getShowAtStartState() const
+{
+    return showAtStart->isChecked();
+}
+
+void ToolBar::setShowAtStartState(bool state)
+{
+    showAtStart->setChecked(state);
+}
+
 void ToolBar::setResizingState(bool state)
 {
     firstForAll->setEnabled(state);
     reload->setEnabled(state);
     restore->setEnabled(state);
     apply->setEnabled(state);
+    showAtStart->setEnabled(state);
     exit->setEnabled(state);
 }
