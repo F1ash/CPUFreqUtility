@@ -5,7 +5,7 @@ class CPUFreqHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit CPUFreqHelper(QObject *parent = NULL);
+    explicit CPUFreqHelper(QObject *parent = Q_NULLPTR);
 
 public slots:
     ActionReply read(QVariantMap args);

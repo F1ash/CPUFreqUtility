@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("CPU Frequence Utility");
     toolBar = new ToolBar(this);
     addToolBar(toolBar);
-    baseLayout = NULL;
-    baseWdg = NULL;
-    scrolled = NULL;
+    baseLayout = Q_NULLPTR;
+    baseWdg = Q_NULLPTR;
+    scrolled = Q_NULLPTR;
     CPU_COUNT = 0;
     timerID = 0;
     initTrayIcon();
@@ -53,11 +53,11 @@ void MainWindow::initTrayIcon()
 
 void MainWindow::initCPU_Items(QStringList &cpus)
 {
-    if (baseLayout!=NULL) {
+    if (baseLayout!=Q_NULLPTR) {
         for (int i=0; i<baseLayout->count(); i++) {
             CPU_Item *wdg = static_cast<CPU_Item*>(
                         baseLayout->itemAt(i)->widget());
-            if ( NULL!=wdg && i==0 ) {
+            if ( Q_NULLPTR!=wdg && i==0 ) {
                 disconnect(wdg, SIGNAL(curr_gov(QString&)),
                            this, SLOT(receiveCurrGovernor(QString&)));
                 disconnect(wdg, SIGNAL(max_freq(QString&)),
@@ -67,15 +67,15 @@ void MainWindow::initCPU_Items(QStringList &cpus)
             };
         };
         delete baseLayout;
-        baseLayout = NULL;
+        baseLayout = Q_NULLPTR;
     };
-    if (baseWdg!=NULL) {
+    if (baseWdg!=Q_NULLPTR) {
         delete baseWdg;
-        baseWdg = NULL;
+        baseWdg = Q_NULLPTR;
     };
-    if (scrolled!=NULL) {
+    if (scrolled!=Q_NULLPTR) {
         delete scrolled;
-        scrolled = NULL;
+        scrolled = Q_NULLPTR;
     };
     CPU_COUNT = cpus.count();
     baseLayout = new QVBoxLayout();
@@ -141,7 +141,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 
 void MainWindow::onResult(ExecuteJob *job)
 {
-    if (NULL==job) {
+    if (Q_NULLPTR==job) {
         KNotification::event(
                     KNotification::Notification,
                     "CPUFreqUtility",
@@ -209,7 +209,7 @@ void MainWindow::setFirstForAll(bool state)
     for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg )
+        if ( Q_NULLPTR!=wdg )
             wdg->setFirstForAllState(state);
     };
 }
@@ -228,7 +228,7 @@ void MainWindow::applyChanges()
     for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg )
+        if ( Q_NULLPTR!=wdg )
             wdg->applyNewSettings();
     };
     baseWdg->setEnabled(true);
@@ -253,7 +253,7 @@ void MainWindow::receiveCurrGovernor(QString &arg)
     for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg )
+        if ( Q_NULLPTR!=wdg )
             wdg->setCurrGovernor(arg);
     };
 }
@@ -263,7 +263,7 @@ void MainWindow::receiveCurrMaxFreq(QString &arg)
     for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg )
+        if ( Q_NULLPTR!=wdg )
             wdg->setCurrMaxFreq(arg);
     };
 }
@@ -273,7 +273,7 @@ void MainWindow::receiveCurrMinFreq(QString &arg)
     for (int i=1; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg )
+        if ( Q_NULLPTR!=wdg )
             wdg->setCurrMinFreq(arg);
     };
 }
@@ -352,7 +352,7 @@ void MainWindow::saveSettings()
     for (int i=0; i<baseLayout->count(); i++) {
         CPU_Item *wdg = static_cast<CPU_Item*>(
                     baseLayout->itemAt(i)->widget());
-        if ( NULL!=wdg ) {
+        if ( Q_NULLPTR!=wdg ) {
             settings.beginGroup(QString("CPU%1").arg(i));
             settings.setValue("Number", wdg->getCPUNumber());
             settings.setValue("Online", wdg->getOnlineState());

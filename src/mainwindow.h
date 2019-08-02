@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = NULL);
+    explicit MainWindow(QWidget *parent = Q_NULLPTR);
     void                _hide();
     void                _show();
 

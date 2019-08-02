@@ -89,7 +89,7 @@ void CPU_Item::setItemData_III()
 
 void CPU_Item::onResult(ExecuteJob *job)
 {
-    if (NULL==job) {
+    if (Q_NULLPTR==job) {
         KNotification::event(
                     KNotification::Notification,
                     "CPUFreqUtility",

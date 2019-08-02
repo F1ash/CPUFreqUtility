@@ -9,7 +9,7 @@ class ToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit ToolBar(QWidget *parent = NULL);
+    explicit ToolBar(QWidget *parent = Q_NULLPTR);
     QPushButton      *firstForAll,
                      *reload,
                      *restore,
