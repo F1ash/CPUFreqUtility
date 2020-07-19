@@ -2,7 +2,7 @@
 Name=CPUFreqUtility
 GenericName=CPU Frequence Utility
 Type=Application
-Categories=Utility;System;Qt;
+Categories=Utility;System;
 Icon=cpu
 Exec=CPUFreqUtility
 Terminal=false
