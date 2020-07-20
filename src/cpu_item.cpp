@@ -15,10 +15,10 @@ CPU_Item::CPU_Item(QWidget *parent, QString num) :
     governors->setToolTip("Governor");
     governors->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     minFreq = new QComboBox(this);
-    minFreq->setToolTip("Minimal Frequence (MGz)");
+    minFreq->setToolTip("Minimal Frequence (MHz)");
     minFreq->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     maxFreq = new QComboBox(this);
-    maxFreq->setToolTip("Maximal Frequence (MGz)");
+    maxFreq->setToolTip("Maximal Frequence (MHz)");
     maxFreq->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     baseLayout = new QHBoxLayout(this);
     baseLayout->addWidget(cpuN);
