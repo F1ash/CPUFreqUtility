@@ -115,7 +115,7 @@ void CPU_Item::onResult(ExecuteJob *job)
             QStringList avail_gov = job->data().value("contents")
                     .toString().replace("\n", "").split(" ");
             avail_gov.removeAll("");
-            avail_gov.prepend("undefined");
+            if (avail_gov.isEmpty()) avail_gov.prepend("undefined");
             governors->addItems(avail_gov);
             for (int i=0; i<governors->count(); i++) {
                 QString gov_Icon = governors->itemText(i);
@@ -136,7 +136,7 @@ void CPU_Item::onResult(ExecuteJob *job)
                 QStringList avail_freq = job->data().value("contents")
                         .toString().replace("\n", "").split(" ");
                 avail_freq.removeAll("");
-                avail_freq.prepend("undefined");
+                if (avail_freq.isEmpty()) avail_freq.prepend("undefined");
                 foreach (QString freq, avail_freq) {
                     QString text = freq.leftJustified(freq.count()-3, '.', true);
                     minFreq->addItem(text, freq);
